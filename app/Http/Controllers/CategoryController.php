@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Http\Requests\Web\Category\UpdateRequest;
+use App\Http\Requests\Category\UpdateRequest;
+use App\Http\Requests\Web\Category\CreateCategoryRequest;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
@@ -41,5 +41,16 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         return view('categories.show', ['category'=> $category]);
+    }
+    public function create()
+    {
+        return view('categories.create');
+    }
+    public function store(CreateCategoryRequest $createRequest)
+    {
+        $request = $createRequest->validated();
+        $this->categoryService->create($request);
+
+        return redirect()->route('categories.index')->with('success', 'Created category success');
     }
 }
